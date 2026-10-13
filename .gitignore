@@ -1,0 +1,25 @@
+# Environment variables and credentials
+.env
+.env.*
+!.env.example
+airflow.env
+*.p8
+*.pem
+
+# Private keys
+*.p8
+*.pem
+
+landed/
+jobs/load/_export/
+
+# dbt artifacts
+target/
+dbt_packages/
+logs/
+
+.idea
+venv
+logs
+__pycache__
+.pytest_cache

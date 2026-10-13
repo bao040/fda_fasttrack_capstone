@@ -1,0 +1,11 @@
+version: 2
+ 
+sources:
+  - name: landing
+    database: FDA_HEALTHCARE_DB
+    schema: LANDING
+    tables:
+      - name: drug_ndc_products
+        description: "Spark-cleaned NDC Directory, 1 row per product_ndc. active_ingredients/packaging/route are VARIANT (array of struct)."
+      - name: drug_adverse_events_reports
+        description: "Spark-cleaned FAERS adverse event reports, 1 row per safetyreportid. reaction/drug are VARIANT (array of struct)."

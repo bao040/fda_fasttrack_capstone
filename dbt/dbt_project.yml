@@ -1,0 +1,39 @@
+name: 'fda_healthcare_dbt'
+config-version: 2
+version: '1.0.0'
+ 
+profile: 'fda_healthcare_dbt'
+ 
+model-paths: ["models"]
+seed-paths: ["seeds"]
+snapshot-paths: ["snapshots"]
+test-paths: ["tests"]
+macro-paths: ["macros"]
+ 
+target-path: "target"
+clean-targets:
+  - "target"
+  - "dbt_packages"
+ 
+models:
+  fda_healthcare_dbt:
+    staging:
+      +materialized: view
+      +schema: staging
+    marts:
+      +materialized: table
+      +schema: marts
+    quarantine:
+      +materialized: view
+      +schema: quarantine
+    reporting:
+      +materialized: table
+      +schema: reporting
+ 
+seeds:
+  fda_healthcare_dbt:
+    +quote_columns: false
+ 
+snapshots:
+  fda_healthcare_dbt:
+    +target_schema: snapshots

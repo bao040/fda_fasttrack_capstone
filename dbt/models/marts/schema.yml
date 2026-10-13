@@ -1,0 +1,60 @@
+version: 2
+ 
+models:
+  - name: dim_drug
+    description: "Current slice of dim_drug_snapshot (SCD2), 1 row per product_ndc."
+    columns:
+      - name: product_ndc
+        tests:
+          - unique
+          - not_null
+      - name: drug_sk
+        tests:
+          - unique
+          - not_null
+ 
+  - name: dim_patient
+    columns:
+      - name: patient_sk
+        tests:
+          - unique
+          - not_null
+ 
+  - name: dim_reporter
+    columns:
+      - name: reporter_sk
+        tests:
+          - unique
+          - not_null
+ 
+  - name: bridge_report_drug
+    description: "1 row per (report, drug, product_ndc candidate). drug_sk is expected to be null for a meaningful share of rows (foreign/unapproved drugs, herbal supplements, missing enrichment) — see conversation notes."
+    columns:
+      - name: product_ndc
+        tests:
+          - relationships:
+              arguments:
+                to: ref('dim_drug')
+                field: product_ndc
+              config:
+                severity: warn
+                where: "product_ndc is not null"
+ 
+  - name: fact_adverse_event_reaction
+    description: "Grain: 1 row per (safetyreportid, reaction). Includes placeholder rows (reactionmeddrapt IS NULL) for reports with no listed reaction."
+    columns:
+      - name: reaction_sk
+        tests:
+          - unique
+          - not_null
+      - name: safetyreportid
+        tests:
+          - not_null
+      - name: reactionoutcome
+        tests:
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5, 6]
+              config:
+                severity: warn
+                where: "reactionoutcome is not null"
